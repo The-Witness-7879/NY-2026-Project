@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Sparkles, Send, Heart } from 'lucide-react';
 import { supabase } from './supabase';
@@ -40,7 +39,7 @@ const ROWS = 9;
 const L_START = 20; 
 const L_END = 80;   
 const T_START = 15; 
-const T_END = 80;   
+const T_END = 82; // 稍微增加一点底部触达，使气泡分布更匀称
 
 interface GridZone {
   t: number;
@@ -255,7 +254,8 @@ export function ChatRoom() {
         </div>
       </div>
       
-      <div ref={containerRef} className="flex-1 relative w-full overflow-hidden mt-6 mb-24" style={{ contain: 'paint' }}>
+      {/* 核心改动：mb-26 md:mb-32 动态控制气泡底部边界 */}
+      <div ref={containerRef} className="flex-1 relative w-full overflow-hidden mt-6 mb-26 md:mb-32" style={{ contain: 'paint' }}>
         <div 
           className="absolute pointer-events-none z-0"
           style={{
@@ -294,7 +294,7 @@ export function ChatRoom() {
         ))}
       </div>
 
-      <div className="absolute bottom-4 md:bottom-8 left-0 w-full z-40 px-3 md:px-20">
+      <div className="absolute bottom-10 md:bottom-12 left-0 w-full z-40 px-3 md:px-20">
         <div className="relative group max-w-2xl mx-auto">
           <div className="relative flex items-center bg-white/[0.06] hover:bg-white/[0.1] focus-within:bg-white/[0.14] border border-white/10 focus-within:border-white/30 rounded-full p-1 md:p-1.5 backdrop-blur-[60px] transition-all duration-500 shadow-xl">
             <input 
