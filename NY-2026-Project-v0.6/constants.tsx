@@ -25,7 +25,7 @@ export const MEMBERS = [
   { 
     id: 3, 
     name: '猫猫', 
-    role: '情感大师', 
+    role: '心理委员', 
     desc: '阴间作息阳间人，夜里精神昼犯浑', 
     color: 'bg-pink-500',
     avatar: 'https://ezadrlmlnocyqztyavqd.supabase.co/storage/v1/object/public/profile%20photo/Cat.jpg'
