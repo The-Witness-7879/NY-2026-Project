@@ -197,7 +197,7 @@ function ActivityTab() {
         <h3 className="text-3xl font-black text-white mb-2 drop-shadow-md">
           ❄️ - 绝凶の进化论 - ❄️
         </h3>
-        <p className="text-white/60">2025.12.31 19:00 - 2026.01.01 进化不停</p>
+        <p className="text-white/60">2025.12.31 19:00 - 2026.01.01 00:00 进化不停</p>
       </div>
 
       <div className="space-y-12 md:space-y-6 relative">
