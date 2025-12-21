@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Trash2, RefreshCcw, CheckCircle } from 'lucide-react';
 import { supabase } from './supabase';
@@ -12,6 +11,11 @@ interface LotteryAdminProps {
   onResetZero?: () => void;
 }
 
+/**
+ * 抽奖管理组件
+ * 当前根据需求已将 UI 隐藏，但保留功能逻辑。
+ * 若需手动触发，可临时移除 'hidden' 类。
+ */
 export function LotteryAdmin({ isLoading, setIsLoading, isDrawn, onForceZero, onResetZero }: LotteryAdminProps) {
   const handleDraw = async () => {
     if (!supabase || isLoading || isDrawn) return;
@@ -74,7 +78,7 @@ export function LotteryAdmin({ isLoading, setIsLoading, isDrawn, onForceZero, on
   };
 
   return (
-    <div className="absolute bottom-3 right-3 z-[9999] flex flex-col gap-2">
+    <div className="absolute bottom-3 right-3 z-[9999] flex flex-col gap-2 hidden">
       <button 
         onClick={handleDraw} 
         disabled={isLoading || isDrawn}
