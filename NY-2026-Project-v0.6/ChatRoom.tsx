@@ -137,7 +137,7 @@ export function ChatRoom() {
     
     const newBubble: BarrageItem = {
       id: msg.id,
-      text: msg.text.slice(0, 15), 
+      text: msg.text, // 还原：移除 .slice(0, 15)
       top: finalPos.t, 
       left: finalPos.l, 
       color: `${style.bg} ${style.text}`, 
@@ -254,7 +254,6 @@ export function ChatRoom() {
         </div>
       </div>
       
-      {/* 核心改动：mb-26 md:mb-32 动态控制气泡底部边界 */}
       <div ref={containerRef} className="flex-1 relative w-full overflow-hidden mt-6 mb-26 md:mb-32" style={{ contain: 'paint' }}>
         <div 
           className="absolute pointer-events-none z-0"
@@ -278,7 +277,7 @@ export function ChatRoom() {
               left: `${barrage.left}%`, 
               zIndex: barrage.zIndex, 
               width: 'max-content', 
-              maxWidth: '200px', 
+              maxWidth: '85vw', // 还原：扩大最大宽度限制，防止挤压
               animationDuration: `${barrage.duration}ms` 
             }}>
             <div className={`bubble-inner-drift px-4 py-3 rounded-[2.5rem] border font-black transition-all duration-700 bg-gradient-to-br shadow-lg ${barrage.color} ${barrage.size === 'lg' ? 'text-lg px-8 py-4 border-opacity-60 scale-105 opacity-100' : (barrage.size === 'md' ? 'text-base px-6 py-3 border-opacity-40 opacity-95' : 'text-xs px-5 py-2.5 border-opacity-30 opacity-90')}`}
@@ -287,7 +286,7 @@ export function ChatRoom() {
                 animationDuration: `${barrage.driftSpeed}s`,
                 transform: `rotate(${barrage.rotate}deg)`
               }}>
-              <span className="drop-shadow-sm tracking-wide block truncate text-center max-w-[160px]">{barrage.text}</span>
+              <span className="drop-shadow-sm tracking-wide block text-center whitespace-normal break-all">{barrage.text}</span> { /* 还原：移除 truncate 和 max-w-160 */ }
               {barrage.size === 'lg' && <div className="absolute -right-1.5 -top-1.5 opacity-80"><Sparkles className="w-4.5 h-4.5 text-yellow-300 animate-pulse" /></div>}
             </div>
           </div>
@@ -302,9 +301,9 @@ export function ChatRoom() {
               value={inputValue} 
               onChange={e => setInputValue(e.target.value)} 
               onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }} 
-              placeholder={supabase ? "输入祝福..." : "配置缺失"}
+              placeholder={supabase ? "输入新年祝福弹幕..." : "配置缺失"} // 修改：更新占位符
               className="flex-1 bg-transparent border-none px-4 py-3 md:px-7 md:py-4 text-white placeholder-white/20 focus:outline-none text-sm md:text-lg font-bold min-w-0" 
-              maxLength={20} 
+              maxLength={40} // 稍微放开一点字数限制以适应“全部展示”
             />
             <button 
               type="button" 
