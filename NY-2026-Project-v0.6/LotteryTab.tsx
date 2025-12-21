@@ -141,6 +141,8 @@ export function LotteryTab() {
     }
   };
 
+  const shouldAnimate = participants.length > 6;
+
   return (
     <div className="px-4 pb-20 max-w-4xl mx-auto space-y-8">
       <div className="bg-black/20 backdrop-blur-md rounded-3xl p-8 border border-white/10 text-center relative overflow-hidden group">
@@ -184,7 +186,7 @@ export function LotteryTab() {
       </div>
 
       <div className="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl overflow-hidden">
-        <div className="flex flex-col md:flex-row min-h-[320px]">
+        <div className="flex flex-col md:flex-row md:items-stretch">
           <div className="flex-1 p-8 md:p-12 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-white/10">
             {isDrawn ? (
               <div className="animate-fade-in scale-110">
@@ -235,22 +237,32 @@ export function LotteryTab() {
             )}
           </div>
 
-          <div className="w-full md:w-64 bg-black/20 p-6 flex flex-col">
+          {/* 固定高度为 340px，确保在大屏和小屏下都只展示 5-6 个 ID 的高度 */}
+          <div className="w-full md:w-64 bg-black/20 p-6 flex flex-col h-[340px] shrink-0">
             <div className="flex items-center gap-2 mb-4 shrink-0">
                <Users className="w-5 h-5 text-blue-300" />
                <h4 className="text-sm font-bold text-white/80 uppercase tracking-widest">参与名单 ({participants.length})</h4>
             </div>
-            <div className="flex-1 overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.2) transparent' }}>
-               <div className="flex flex-col gap-2">
-                 {participants.map((name, idx) => (
-                   <div key={idx} className="px-3 py-2 bg-white/5 rounded-xl text-sm text-white/70 border border-white/5 animate-fade-in hover:bg-white/10 transition-colors">
-                     {name}
-                   </div>
-                 ))}
-                 {participants.length === 0 && (
-                   <div className="text-white/30 italic text-xs text-center py-4">等待首位参与者...</div>
-                 )}
-               </div>
+            
+            <div className="flex-1 relative overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
+               {participants.length === 0 ? (
+                 <div className="text-white/30 italic text-xs text-center py-4">等待首位参与者...</div>
+               ) : (
+                 <div className={`flex flex-col gap-2 ${shouldAnimate ? 'animate-vertical-carousel' : ''}`}>
+                   {/* 正常渲染列表 */}
+                   {participants.map((name, idx) => (
+                     <div key={`orig-${idx}`} className="px-3 py-2 bg-white/5 rounded-xl text-sm text-white/70 border border-white/5 hover:bg-white/10 transition-colors whitespace-nowrap truncate shrink-0">
+                       {name}
+                     </div>
+                   ))}
+                   {/* 如果需要轮播，再渲染一份用于无缝循环 */}
+                   {shouldAnimate && participants.map((name, idx) => (
+                     <div key={`clone-${idx}`} className="px-3 py-2 bg-white/5 rounded-xl text-sm text-white/70 border border-white/5 hover:bg-white/10 transition-colors whitespace-nowrap truncate shrink-0">
+                       {name}
+                     </div>
+                   ))}
+                 </div>
+               )}
             </div>
           </div>
         </div>
@@ -291,6 +303,19 @@ export function LotteryTab() {
            ))}
          </div>
       </div>
+
+      <style>{`
+        @keyframes vertical-carousel {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+        .animate-vertical-carousel {
+          animation: vertical-carousel ${Math.max(12, participants.length * 2)}s linear infinite;
+        }
+        .animate-vertical-carousel:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </div>
   );
 }
