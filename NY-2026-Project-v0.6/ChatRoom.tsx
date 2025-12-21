@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Sparkles, Send, Heart } from 'lucide-react';
 import { supabase } from './supabase';
@@ -34,12 +35,12 @@ const BUBBLE_STYLES = [
   { bg: 'from-violet-600 to-fuchsia-800 border-violet-400', text: 'text-white' }
 ];
 
-const COLS = 11;
-const ROWS = 9;
-const L_START = 20; 
+const COLS = 10;
+const ROWS = 10;
+const L_START = 25; 
 const L_END = 80;   
 const T_START = 15; 
-const T_END = 82; // 稍微增加一点底部触达，使气泡分布更匀称
+const T_END = 77;
 
 interface GridZone {
   t: number;
@@ -137,7 +138,7 @@ export function ChatRoom() {
     
     const newBubble: BarrageItem = {
       id: msg.id,
-      text: msg.text, // 还原：移除 .slice(0, 15)
+      text: msg.text,
       top: finalPos.t, 
       left: finalPos.l, 
       color: `${style.bg} ${style.text}`, 
@@ -254,7 +255,8 @@ export function ChatRoom() {
         </div>
       </div>
       
-      <div ref={containerRef} className="flex-1 relative w-full overflow-hidden mt-6 mb-26 md:mb-32" style={{ contain: 'paint' }}>
+      {/* 修改点：mb-26 增加到 mb-36 确保弹幕生成区域远离底部输入组件 */}
+      <div ref={containerRef} className="flex-1 relative w-full overflow-hidden mt-6 mb-30 md:mb-32" style={{ contain: 'paint' }}>
         <div 
           className="absolute pointer-events-none z-0"
           style={{
@@ -277,7 +279,7 @@ export function ChatRoom() {
               left: `${barrage.left}%`, 
               zIndex: barrage.zIndex, 
               width: 'max-content', 
-              maxWidth: '85vw', // 还原：扩大最大宽度限制，防止挤压
+              maxWidth: '85vw', 
               animationDuration: `${barrage.duration}ms` 
             }}>
             <div className={`bubble-inner-drift px-4 py-3 rounded-[2.5rem] border font-black transition-all duration-700 bg-gradient-to-br shadow-lg ${barrage.color} ${barrage.size === 'lg' ? 'text-lg px-8 py-4 border-opacity-60 scale-105 opacity-100' : (barrage.size === 'md' ? 'text-base px-6 py-3 border-opacity-40 opacity-95' : 'text-xs px-5 py-2.5 border-opacity-30 opacity-90')}`}
@@ -286,7 +288,7 @@ export function ChatRoom() {
                 animationDuration: `${barrage.driftSpeed}s`,
                 transform: `rotate(${barrage.rotate}deg)`
               }}>
-              <span className="drop-shadow-sm tracking-wide block text-center whitespace-normal break-all">{barrage.text}</span> { /* 还原：移除 truncate 和 max-w-160 */ }
+              <span className="drop-shadow-sm tracking-wide block text-center whitespace-normal break-all">{barrage.text}</span>
               {barrage.size === 'lg' && <div className="absolute -right-1.5 -top-1.5 opacity-80"><Sparkles className="w-4.5 h-4.5 text-yellow-300 animate-pulse" /></div>}
             </div>
           </div>
@@ -301,9 +303,9 @@ export function ChatRoom() {
               value={inputValue} 
               onChange={e => setInputValue(e.target.value)} 
               onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }} 
-              placeholder={supabase ? "输入新年祝福弹幕..." : "配置缺失"} // 修改：更新占位符
+              placeholder={supabase ? "输入新年祝福弹幕..." : "配置缺失"}
               className="flex-1 bg-transparent border-none px-4 py-3 md:px-7 md:py-4 text-white placeholder-white/20 focus:outline-none text-sm md:text-lg font-bold min-w-0" 
-              maxLength={40} // 稍微放开一点字数限制以适应“全部展示”
+              maxLength={40}
             />
             <button 
               type="button" 
