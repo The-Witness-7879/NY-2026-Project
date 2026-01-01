@@ -256,7 +256,7 @@ function ActivityTab() {
                       </div>
                       <div className="text-xs text-yellow-300/50 italic flex items-center gap-1">
                         <Star className="w-3 h-3 animate-spin-slow" />
-                        即将揭晓
+                        太强了！
                       </div>
                    </div>
                 </div>
